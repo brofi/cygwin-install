@@ -1,7 +1,8 @@
+@echo off
+
 rem TODO proxy
 rem TODO args
 
-@echo off
 setlocal EnableDelayedExpansion
 
 :init
