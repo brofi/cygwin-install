@@ -11,7 +11,7 @@ setlocal EnableDelayedExpansion
 
     set rootDir="C:\cygwin"
     set setupDir="%HOMEDRIVE%%HOMEPATH%\cygwin"
-    set downloadSite="http://ftp.inf.tu-dresden.de/software/windows/cygwin/%arch%"
+    set downloadSite="http://ftp.inf.tu-dresden.de/software/windows/cygwin"
     set pkgList="%~dp0\pkg-list"
 
     set pkgDir="%setupDir%\pkg"
