@@ -1,16 +1,19 @@
+rem TODO proxy
+rem TODO args
+
 @echo off
 setlocal EnableDelayedExpansion
 
 :init
-    rem Path to this script.
-    set dir="%~dp0"
-
     rem PATH might be different (e.g. cygwin).
     set bin="%SYSTEMROOT%\System32"
 
-    set cygDir="%HOMEDRIVE%%HOMEPATH%\cygwin"
+    set rootDir="C:\cygwin"
+    set setupDir="%HOMEDRIVE%%HOMEPATH%\cygwin"
+    set downloadSite="http://ftp.inf.tu-dresden.de/software/windows/cygwin/%arch%"
+    set pkgList="%~dp0\pkg-list"
 
-    set pkgDir="%cygDir%\pkg"
+    set pkgDir="%setupDir%\pkg"
     md %pkgDir% >nul 2>&1
 
     rem Get Windows system type.
@@ -23,7 +26,7 @@ setlocal EnableDelayedExpansion
     )
 
     set cygUrl="https://www.cygwin.com/setup-%arch%.exe"
-    set installer="%cygDir%\setup-%arch%.exe"
+    set installer="%setupDir%\setup-%arch%.exe"
 
     if exist %installer% goto install
 
@@ -42,17 +45,20 @@ setlocal EnableDelayedExpansion
 
 :install
     rem Read package list comma seperated in 'pkgs'.
-    for /f "delims=" %%p in ("%dir%pkg-list") do (
+    for /f "usebackq delims=" %%p in (%pkgList%) do (
         set pkgs=!pkgs!,%%p
     )
     rem Remove leading ','.
     set pkgs=%pkgs:~1%
 
     rem Run the installer.
-    rem TODO figure out extra packages (put in file)
     %installer% ^
-    --quiet-mode ^
-    --local-package-dir %pkgDir% ^
-    --packages %pkgs% ^
-    --upgrade-also ^
-    --no-desktop
+        --site %downloadSite% ^
+        --root %rootDir% ^
+        --packages %pkgs% ^
+        --categories base ^
+        --arch %arch% ^
+        --quiet-mode ^
+        --local-package-dir %pkgDir% ^
+        --no-desktop ^
+        --upgrade-also
